@@ -1,0 +1,15 @@
+- name: connection checking for linux server
+  hosts: dev
+  ignore_errors: true
+  tasks:
+  - name: checking connection
+    wait_for_connection:
+       timeout: 15
+    register: connection
+       
+  - debug: msg="There is no packet drop and the server is reachable"
+    when: connection is not failed
+
+  - debug: msg="The server is not reachable"
+    when: connection is failed
+

@@ -1,0 +1,26 @@
+- name: checking connectivity
+  hosts: dev
+  gather_facts: false
+  ignore_errors: true
+  tasks:
+  - name: checking connectivity
+    wait_for_connection:
+     timeout: 5
+    register: connection
+
+  - debug: var=connection
+
+  - set_fact:
+      connection_res="{{connection.failed}}"
+
+  - debug:
+     msg:
+      - "Target host is reachable"
+    when: connection_res == false
+
+  - debug:
+      msg:
+       - "Target host not reachable"
+    when: connection_res != false
+
+
